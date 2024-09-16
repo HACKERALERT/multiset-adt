@@ -9,6 +9,11 @@ public class Tree {
         this._subtrees = subtrees;
     }
 
+    public Tree() {
+        this._root = new TreeNode();
+        this._subtrees = new ArrayList<Tree>();
+    }
+
     public boolean isEmpty() {
         return this._root.isNull(); 
     }
@@ -52,6 +57,62 @@ public class Tree {
     public float average() {
         if (this.isEmpty())
             return 0;
-        
+        ArrayList<Integer> tuple = this.averageHelper();
+        return (float) tuple.get(0) / tuple.get(1);
+    }
+
+    private ArrayList<Integer> averageHelper() {
+        ArrayList<Integer> tuple = new ArrayList<Integer>();
+        if (this.isEmpty()) {
+            tuple.add(0);
+            tuple.add(0);
+            return tuple;
+        }
+        int total = this._root.value();
+        int size = 1;
+        for (Tree subtree: this._subtrees) {
+            ArrayList<Integer> subTuple = subtree.averageHelper();
+            total += subTuple.get(0);
+            size += subTuple.get(1);
+        }
+        tuple.add(total);
+        tuple.add(size);
+        return tuple;
+    }
+
+    public boolean equals(Tree other) {
+        if (this.isEmpty() && other.isEmpty())
+            return true;
+        if (this.isEmpty() || other.isEmpty())
+            return false;
+        if (this._root.value() != other._root.value())
+            return false;
+        if (this._subtrees.size() != other._subtrees.size())
+            return false;
+        return this._subtrees.equals(other._subtrees);
+    }
+
+    public boolean contains(int item) {
+        if (this.isEmpty())
+            return false;
+        if (this._root.value() == item)
+            return true;
+        for (Tree subtree: this._subtrees)
+            if (subtree.contains(item))
+                return true;
+        return false;
+    }
+
+    public ArrayList<Integer> leaves() {
+        ArrayList<Integer> lis = new ArrayList<Integer>();
+        if (this.isEmpty())
+            return lis;
+        if (this._subtrees.isEmpty()) {
+            lis.add(this._root.value());
+            return lis;
+        }
+        for (Tree subtree: this._subtrees)
+            lis.addAll(subtree.leaves());
+        return lis;
     }
 }
