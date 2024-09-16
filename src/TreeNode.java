@@ -1,13 +1,14 @@
 public class TreeNode {
-    private int _value;
+    private int value;
     private boolean isNull;
 
     public TreeNode(int value) {
-        this._value = value;
+        this.value = value;
         this.isNull = false;
     }
 
     public TreeNode() {
+        this.value = 0;
         this.isNull = true;
     }
 
@@ -16,6 +17,6 @@ public class TreeNode {
     }
 
     public int value() {
-        return this._value;
+        return this.value;
     }
 }
