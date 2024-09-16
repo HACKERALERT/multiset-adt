@@ -115,4 +115,37 @@ public class Tree {
             lis.addAll(subtree.leaves());
         return lis;
     }
+
+    // Mutating methods
+
+    public boolean deleteItem(int item) {
+        if (this.isEmpty())
+            return false;
+        if (this._root.value() == item) {
+            this.deleteRoot();
+            return true;
+        }
+        for (Tree subtree: this._subtrees) {
+            boolean deleted = subtree.deleteItem(item);
+            if (deleted && subtree.isEmpty()) {
+                this._subtrees.remove(subtree);
+                return true;
+            } else if (deleted) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void deleteRoot() {
+        if (this._subtrees.isEmpty())
+            this._root = new TreeNode();
+        else {
+            // Get the last subtree in this tree.
+            Tree chosenSubtree = this._subtrees.get(this._subtrees.size() - 1);
+            this._subtrees = (ArrayList<Tree>) this._subtrees.subList(0, this._subtrees.size() - 1);
+            this._root = chosenSubtree._root;
+            this._subtrees.addAll(chosenSubtree._subtrees);
+        }
+    }
 }
